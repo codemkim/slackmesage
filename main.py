@@ -9,6 +9,11 @@ def post_message(token, channel, text):
     print(response)
 
 
-myToken = "xoxb-2266850767047-2266865913351-zFYIywiNDCc1Gt09gcNcajDD"
+myToken = "xoxp-2266850767047-2305263783744-2294418003393-7fdef098d75a0bec073d5a907b6d0bd4"
 
-post_message(myToken, "#stock", "jocoding")
+text = '주환이 ㅎㅇ'
+
+channel_name = '#stock'
+
+post_message(myToken, channel_name, text)
+
