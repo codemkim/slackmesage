@@ -26,9 +26,9 @@ from bs4 import BeautifulSoup as bs
 # post_message(myToken, channel_name, text)
 
 
-def get_soup():
-    # 네이버 금융 url ( samsung )
-    url = 'https://finance.naver.com/item/main.nhn?code=005930'
+def get_soup(company_code):
+    # 네이버 금융 url
+    url = 'https://finance.naver.com/item/main.nhn?code='+company_code
 
     # requests를 통한 url 받아오기
     res = requests.get(url)
@@ -38,7 +38,8 @@ def get_soup():
 
     return soup
 
-def get_price(soup):
+def get_price(company_code):
+    soup = get_soup(company_code)
 
     today_s = soup.find('p', {'class':'no_today'})
 
@@ -46,8 +47,8 @@ def get_price(soup):
 
     return blind_s.text
 
-soup = get_soup()
 
-s_price = get_price(soup)
+
+s_price = get_price('000660')
 
 print(s_price)
