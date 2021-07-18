@@ -48,22 +48,28 @@ def get_price(company_code):
 
     return blind_s.text.replace(',', '')
 
+#시초가
+first_price = int(get_price('005930'))
 
+# 상승 / 하락 %
+max_p = 0.01
+min_p = 0.01
+# 목표 가격
+target_max_price = first_price + (first_price * max_p)
+target_min_price = first_price - (first_price * min_p)
 
-
-
+# 자동 알림 코드
 while True:
     s_price = int(get_price('005930'))
 
-    if s_price > 80000:
-        # 메시지 전송 함수 호출
+    if s_price >= target_max_price:
         post_message(s_price)
 
-    elif s_price <= 79000:
-        # 메시지 전송 함수 호출
+        target_max_price = s_price + (first_price * max_p)
+
+    elif s_price <= target_min_price:
         post_message(s_price)
 
-    elif s_price == 79800:
-        post_message(s_price)
+        target_min_price = s_price + (first_price * min_p)
 
     time.sleep(5)
