@@ -9,9 +9,11 @@ res = requests.get(url)
 
 soup = bs(res.content, 'html.parser')
 
-title = soup.find('tr', {'class':'title'})
+title = soup.find('div', attrs={'class':'box_type_l'})
 
-print(title)
+table = title.find('td', attrs={'class':'title'})
+
+
 #
 #
 # stock_code =[]

@@ -17,6 +17,7 @@ def set_message():
 
     return myToken, channel_name
 
+
 # 파이썬에서 슬랙으로 메시지 보내는 함수
 def post_message(text):
     token, channel = set_message()
@@ -40,7 +41,7 @@ def get_soup(company_code):
 
     return soup
 
-# 가격정보 받아오기
+# 가격정보 받아오기(네이버)
 def get_price(company_code):
     soup = get_soup(company_code)
 
@@ -51,43 +52,56 @@ def get_price(company_code):
     return blind_s.text.replace(',', '')
 
 
-# 상승 / 하락 %
+# 상승 / 하락 확인 %
 max_p = 0.001
 min_p = 0.001
 
-# 나의 평단
+# 나의 평균 단가 및 투자 금액
 first_price = 79800
+my_money = 6623400
 
-# 목표 가격
+# 실시간 가격 확인
 target_max_price = first_price + (first_price * max_p)
 target_min_price = first_price - (first_price * min_p)
 
 
 # 자동 알림 코드
-
 while True:
+
+    # 현재가격
     s_price = int(get_price('005930'))
 
+    # 손익/손실
+    persent = ( abs(first_price - s_price) / first_price )
+    temp = str(my_money * persent)
+    persent = str(persent * 100)
 
+    # 현재시간
+    now = str(datetime.now())
+
+    # + / - 기호 설정
+    if s_price >= first_price:
+        sign = '+'
+    else:
+        sign = '-'
+
+    # 실시간 가격 변동 알림
     if s_price >= target_max_price:
-        now = str(datetime.now())
-        post_message(f'삼성전자 : {str(s_price)} / 시간 : {now[:-6]}')
 
+        # 메시지 전송
+        post_message(f'손익(삼성) : {sign} {temp[:-2]}({sign}{persent[:4]}%) / 시간 : {now[10:-6]}')
+
+        # 타겟 max/ min 값 지속 변경을 통한 실시간 알림
         target_max_price = s_price + (first_price * max_p)
-
         target_min_price = s_price - (first_price * min_p)
-
-        print(target_max_price, target_min_price)
 
     elif s_price <= target_min_price:
-        now = str(datetime.now())
-        post_message(f'삼성전자 : {str(s_price)} / 시간 : {now[:-6]}')
+
+        post_message(f'손익(삼성) : {sign} {temp[:-2]}({sign}{persent[:4]}%) / 시간 : {now[10:-6]}')
 
         target_max_price = s_price + (first_price * max_p)
 
         target_min_price = s_price - (first_price * min_p)
-
-        print(target_max_price, target_min_price)
 
     time.sleep(20)
 
