@@ -103,6 +103,6 @@ while True:
 
         target_min_price = s_price - (first_price * min_p)
 
-    time.sleep(60)
+    time.sleep(40)
 
 
